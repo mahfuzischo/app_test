@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:appifylab_test/models/searched_city_model.dart';
 import 'package:appifylab_test/models/searched_weather_model.dart';
 
 import 'package:appifylab_test/states/searched_weather_state.dart';
@@ -25,19 +24,19 @@ class SearchedWeatherViewModel extends Notifier<SearchedWeatherState> {
 
     if (searchedCityLoc.statusCode == 200) {
       print(searchedCityLoc.body);
-      final tempCityModel = jsonDecode(searchedCityLoc.body);
-      final cityModel = SearchedCityModel.fromJson(tempCityModel);
+      // final tempCityModel = jsonDecode(searchedCityLoc.body);
+      // final cityModel = SearchedWeatherModel.fromJSON(tempCityModel);
 
-      final lat = cityModel.lat;
-      final lon = cityModel.lon;
-      print('lat $lat lon:$lon');
+      // final lat = cityModel.lat;
+      // final lon = cityModel.lon;
+      // print('lat $lat lon:$lon');
 
-      String endpoint2 =
-          'weather?lat=$lat&lon=$lon&appid=${dotenv.env['API_Key']}';
+      // String endpoint2 =
+      //     'weather?lat=$lat&lon=$lon&appid=${dotenv.env['API_Key']}';
 
-      final url2 = Uri.parse('${dotenv.env['Base_URL']}$endpoint2');
+      // final url2 = Uri.parse('${dotenv.env['Base_URL']}$endpoint2');
 
-      final response = await http.get(url2);
+      final response = searchedCityLoc;
       if (response.statusCode == 200) {
         final tData = jsonDecode(response.body);
         final data = SearchedWeatherModel.fromJSON(tData);

@@ -21,7 +21,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
   }
 
   int convertTemp(double kelvin) {
-    double celsius = ((kelvin - 273.15) * 9 / 5) + 32;
+    double celsius = kelvin - 273.15;
     return celsius.round();
   }
 
