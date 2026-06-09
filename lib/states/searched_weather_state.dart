@@ -1,4 +1,3 @@
-import 'package:appifylab_test/models/current_weather_model.dart';
 import 'package:appifylab_test/models/searched_weather_model.dart';
 
 class SearchedWeatherState {

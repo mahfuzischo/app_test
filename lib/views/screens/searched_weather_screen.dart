@@ -1,4 +1,3 @@
-import 'package:appifylab_test/states/searched_weather_state.dart';
 import 'package:appifylab_test/view_models/searched_weather_view_model.dart';
 import 'package:appifylab_test/views/screens/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -59,25 +58,36 @@ class _SearchedWeatherScreenState extends ConsumerState<SearchedWeatherScreen> {
                 ),
               )
             : searchedWeather == null
-            ? Center(
-                child: Column(
-                  children: [
-                    Text('Search to find weather updates.'),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SearchScreen();
-                            },
-                          ),
-                        );
-                      },
-                      child: Text('Search'),
-                    ),
-                  ],
+            ? Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                width: double.infinity,
+                height: screenSize.height,
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Search to find weather updates.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SearchScreen();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text('Search'),
+                      ),
+                    ],
+                  ),
                 ),
               )
             : Column(

@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-import 'package:appifylab_test/models/current_weather_model.dart';
-import 'package:appifylab_test/states/current_weather_state.dart';
+import 'package:appifylab_test/models/forecast_model.dart';
 
+import 'package:appifylab_test/states/forecast_state.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
-class CurrentWeatherViewModel extends Notifier<CurrentWeatherState> {
+class ForecastViewModel extends Notifier<ForecastState> {
   @override
   build() {
-    return CurrentWeatherState();
+    return ForecastState();
   }
 
   Future<Position> _getCurrentLocation() async {
@@ -48,33 +49,35 @@ class CurrentWeatherViewModel extends Notifier<CurrentWeatherState> {
     return position;
   }
 
-  Future<void> getCurrentWeather() async {
+  Future<void> getForecast() async {
     final position = await _getCurrentLocation();
     final lat = position.latitude;
     final lon = position.longitude;
 
     String endpoint =
-        'weather?lat=$lat&lon=$lon&appid=${dotenv.env['API_Key']}';
-
+        'forecast?lat=$lat&lon=$lon&appid=${dotenv.env['API_Key']}';
     final url = Uri.parse('${dotenv.env['Base_URL']}$endpoint');
     state = state.copyWith(loadingState: true);
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final tData = jsonDecode(response.body);
-      final data = CurrentWeatherModel.fromJSON(tData);
 
-      state = state.copyWith(currentWeather: data, loadingState: false);
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final tData = jsonDecode(response.body)['list'] as List;
+      print('data:$tData');
+      final data = tData.map((e) => ForecastModel.fromJSON(e)).toList();
+      debugPrint('forecast data: $data');
+      state = state.copyWith(forecast: data, loadingState: false);
     } else {
       state = state.copyWith(
         err:
-            'Failed to fetch current weather with status code ${response.statusCode}',
+            'Failed to load forecast data with status code ${response.statusCode}',
         loadingState: false,
       );
     }
   }
 }
 
-final currentWeatherViewModelProvider =
-    NotifierProvider<CurrentWeatherViewModel, CurrentWeatherState>(() {
-      return CurrentWeatherViewModel();
+final forecastViewModelProvider =
+    NotifierProvider<ForecastViewModel, ForecastState>(() {
+      return ForecastViewModel();
     });
